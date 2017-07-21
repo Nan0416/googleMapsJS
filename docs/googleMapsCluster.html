@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       #map {
+        height: 600px;
+        width: 100%;
+        background-color: grey;
+       }
+    </style>
+  </head>
+  <body>
+    <h3>My Google Maps Demo</h3>
+    <div id="map">
+      <!-- used for google maps-->
+    </div>
+    <script>
+      function initMap() {
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 2,
+          center: {lat: 0, lng: 0}
+        });
+
+        // Create an array of alphabetical characters used to label the markers.
+        var labels = ['WQ', 'MN', 'IW'];
+
+        // Add some markers to the map.
+        // Note: The code uses the JavaScript Array.prototype.map() method to
+        // create an array of markers based on a given "locations" array.
+        // The map() method here has nothing to do with the Google Maps API.
+        var markers = locations.map(function(location, i) {
+          return new google.maps.Marker({
+            position: location,
+            label: labels[i % labels.length]
+          });
+        });
+
+        // Add a marker clusterer to manage the markers.
+        var markerCluster = new MarkerClusterer(map, markers,
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+      }
+      var locations = [
+        {lat: 39.387910, lng: 117.019312},
+        {lat: 45.718234, lng: -94.363181},
+        {lat: 42.727111, lng: -93.371124}]
+        
+      
+    </script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxZKLlAh-t_QuOLpxMNbfYSNjh3qRtKdI&callback=initMap&">
+    // script 从指定网址加载 API。 
+    // callback 参数在 API 加载完毕后执行 initMap 函数。 
+    // async 属性允许浏览器在 API 加载的同时继续渲染页面的其余内容。
+    </script>
+  </body>
+</html>
