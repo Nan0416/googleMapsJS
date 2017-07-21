@@ -1,40 +1,11 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <style>
-       #map {
-        height: 400px;
-        width: 100%;
-        background-color: grey;
-       }
-    </style>
-  </head>
-  <body>
-    <h3>My Google Maps Demo</h3>
-    <div id="map">
-      <!-- used for google maps-->
-    </div>
-    <script>
-      function initMap() {
-        var uluru = {lat: -25.363, lng: 131.044};
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
-          center: uluru
-        });
-        // zoom in = 4
-        // .Map( doc object, object used for position)
-        var marker = new google.maps.Marker({
-          position: uluru,
-          map: map
-        });
-        // .Marker( object of position, which map object to render)
-      }
-    </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxZKLlAh-t_QuOLpxMNbfYSNjh3qRtKdI&callback=initMap">
-    // script 从指定网址加载 API。 
-    // callback 参数在 API 加载完毕后执行 initMap 函数。 
-    // async 属性允许浏览器在 API 加载的同时继续渲染页面的其余内容。
-    </script>
-  </body>
+    <head>
+        <title>Google Maps JS API show</title>
+
+    </head>
+    <body>
+        <li><a href = "/googleMapsMark.html">A Single Mark</a></li>
+        <li><a href = "/googleMapsCluster.html">A Cluster of Marks</a></li>
+    </body>
 </html>
