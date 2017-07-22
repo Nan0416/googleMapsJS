@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      function round(num, postion){
+        var t = Math.pow(10, 2);
+
+        num = Math.round(num * t) / t;
+        return num;
+      }
+    </script>
+    <style>
+       #map {
+        height: 600px;
+        width: 100%;
+        background-color: grey;
+       }
+    </style>
+  </head>
+  <body>
+    <h3>App 001</h3>
+    <div id="map">
+      <!-- used for google maps-->
+    </div>
+    <br><br>
+    <div id="control maps">
+      <button type = "button" onclick = "goTo('home')">GO HOME</button>
+      <button type = "button" onclick = "goTo('school')">GO SCHOOL</button>
+      <p id = "center_data"></p>
+    </div>
+    <script>
+      var map;
+      var locations = {
+        home: {lat: 39.387910, lng: 117.019312},
+        school: {lat: 45.718234, lng: -94.363181}
+      };
+      var t;
+      function goTo(location) {
+        if (locations[location]){
+          map.panTo(locations[location]);
+          map.setZoom(7);
+        }
+      }
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), { zoom: 2, center: {lat: 0, lng: 0}});
+        /*map.center_changed = function(){
+          alert("CallBack .center_changed: Center Will Changed");
+        }*/
+        google.maps.event.addListener(map, 'mousemove', function(location_event){
+          var percision = 2;
+          var lat = location_event.latLng.lat();
+          var lng = location_event.latLng.lng();
+          document.getElementById("center_data").innerHTML = "Latitude: " + round(lat, percision) + ", longitude: " + round(lng, percision);
+
+        });
+        /*
+        map.click = function(location){
+          alert("click");
+          console.log("click");
+        }
+
+        map.mousemove = function(location){
+          console.log("mousemove");
+        }
+        map.drag = function(){
+
+        }
+        alert("Finish initialization")
+        */
+      }
+    </script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxZKLlAh-t_QuOLpxMNbfYSNjh3qRtKdI&callback=initMap">
+    // script 从指定网址加载 API。
+    // callback 参数在 API 加载完毕后执行 initMap 函数。
+    // async 属性允许浏览器在 API 加载的同时继续渲染页面的其余内容。
+    </script>
+  </body>
+</html>
