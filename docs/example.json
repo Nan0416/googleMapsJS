@@ -1,0 +1,85 @@
+{
+  "id": "Example",
+  "desc": "Wiera policy example",
+  "local_instances": {
+    "aws-us-east": {
+      "storage_tiers": [
+        {
+          "tier_name": "memcached",
+          "tier_size": "256MB",
+          "tier_type": 0,
+          "tier_location": "127.0.0.1",
+          "tier_expected_latency": 0
+        },
+        {
+          "tier_name": "ebs-st1",
+          "tier_size": "5GB",
+          "tier_type": 2,
+          "tier_location": "ebs-st1/",
+          "tier_expected_latency": 10
+        },
+        {
+          "tier_name": "s3",
+          "tier_size": "10GB",
+          "tier_type": 3,
+          "storage_id1": "AKA",
+          "storage_id2": "amS4",
+          "storage_arg1": "tiera-us-east",
+          "storage_arg2": "tieradata",
+          "storage_provider": 0,
+          "tier_expected_latency": 60
+        }
+      ],
+      "events": [
+        {
+          "event_type": "ActionGet",
+          "event_parameters":{},
+          "responses": [
+            {
+              "response_type": "Retrieve",
+              "response_parameters": {}
+            },
+          ]
+        },
+        {
+          "event_type": "ActionPut",
+          "event_parameters":{"to": "memcached"},
+          "responses": [
+            {
+              "response_type": "Compress",
+              "response_parameters": {}
+            },
+            {
+              "response_type": "Store",
+              "response_parameters": {"to": "memcached"}
+            },
+            {
+              "response_type": "Queue",
+              "response_paramters": {"to": "all_instances"}
+            }
+          ]
+        },
+        {
+          "event_type": "Timer",
+          "event_parameters":{"period": 10000},
+          "responses": [
+            {
+              "response_type": "Copy",
+              "response_parameters": {"location": "memcached", "dirty": true, "to": "ebs-st1"}
+            }
+          ]
+        },
+        {
+          "event_type": "MonitoringTierCapacity",
+          "event_parameters": {"tierName": "memcached","filled": 75},
+          "responses": [
+            {
+              "response_type": "Grow",
+              "response_parameters": {"what": "memcached", "increment": "100%"}
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
