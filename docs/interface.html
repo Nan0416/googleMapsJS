@@ -1,92 +1,38 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>JSON Interface</title>
-
+    <!-- UI indepenet Model -->
+    <script src = "./generateJSON.js"></script>
     <script>
     // helper
       function printTo(str){
         var temp = document.getElementById("print_1").innerHTML;
         document.getElementById("print_1").innerHTML = temp + str;
-
       }
     </script>
-    <script>
-    function Wiera(){
-      this.wieraPolicy = {};
-      this.idKey = "id";
-      this.descKey = "desc";
-      this.localInstancesKey = "local_instances";
-      this.toJSON = function(){
-        return JSON.stringify(this.wieraPolicy);
-      }
-      this.configuration = function(id, desc){
-        this.wieraPolicy[this.idKey] = id;
-        this.wieraPolicy[this.descKey] = desc;
-        this.wieraPolicy[this.localInstancesKey] = null;
-      }
-      this.addARegionalTiera = function(region, tieraName){
-
-       if (this.wieraPolicy[this.localInstancesKey]){
-        //  this.wieraPolicy[this.localInstancesKey][region][tieraName] = null;
-        }else{
-          var obj = new Object();
-          obj[region] = new Object();
-          obj[region][tieraName] = null;
-          this.wieraPolicy[this.localInstancesKey] = obj;
-        }
-        return new Tiera(this, region, tieraName);
-      }
-
-      //this.addATieraInstanceTo(region, tieraName)
-    }
-
-    function Tiera(wiera, region, tieraName){
-      this.wiera = wiera;
-      this.region = region;
-      this.tieraName = tieraName;
-      this.wiera.wieraPolicy[this.wiera.localInstancesKey][region][tieraName] = new Array();
-      this.tieraSeverOrder = new Array();
-      this.tierName = "tier_name";
-      this.tierSize = "tier_size";
-      this.tierType = "tier_type";
-      this.tierLocation = "tier_location";
-      this.tierExpectedLatency = "tier_expected_latency";
-      this.addATier = function initialnInstance(name, size, type, location, expected_latency){
-        var temp = this.wiera.wieraPolicy[this.wiera.localInstancesKey][this.region];
-        if(temp[this.tieraName].length != this.tieraSeverOrder.length){
-          return;
-        }
-        var len = this.tieraSeverOrder.length;
-        var assemble = new Object();
-        assemble[this.tierName] = name;
-        assemble[this.tierSize] = size;
-        assemble[this.tierType] = type;
-        assemble[this.tierLocation] = location;
-        assemble[this.tierExpectedLatency] = expected_latency;
-
-        this.tieraSeverOrder[len] = name;
-        temp[this.tieraName][len] = assemble;
-        
-      }
-    }
-
-
-
-
-
-    </script>
+    <title>JSON Interface</title>
   </head>
   <body>
 
     <p id = "print_1"></p>
+    <p id = "p"></p>
+    <div id = "sss"></div>
     <script>
       var wiera = new Wiera();
       wiera.configuration("example", "example for demostration");
-      var tiera1 = wiera.addARegionalTiera("us-east", "storage_tiers");
+      var tiera1 = wiera.addARegionalTiera("us-east");
+      tiera1.setName("storage_tiers");
       tiera1.addATier("memcached", "256MB", 0, "127.0.0.1", 0);
-      tiera1.addATier("memcached", "256MB", 0, "127.0.0.1", 0);
-      printTo(wiera.toJSON());
+      tiera1.addATier("S3", "5G", 0, "127.0.0.1", 0);
+      tiera1.addAEvent("ActionGet", {}, [{"reponse_type":"Retrieve", "response_parameters":{}}]);
+    //  printTo(wiera.toJSON());
+      //document.getElementById("print_1").innerHTML = JSON.stringify(wiera.wieraPolicy, null, 1);
+      //var obj = {"id":"example","desc":"example for demostration","local_instances":{"us-east":{"storage_tiers":[{"tier_name":"memcached","tier_size":"256MB","tier_type":0,"tier_location":"127.0.0.1","tier_expected_latency":0},{"tier_name":"S3","tier_size":"5G","tier_type":0,"tier_location":"127.0.0.1","tier_expected_latency":0}],"events":[{"event_type":"ActionGet","event_parameters":{},"responses":[{"reponse_type":"Retrieve","response_parameters":{}}]}]}}}
+      var objs = {  "id": "example",  "desc": "example for demostration",  "local_instances": {  "us-east": {    "storage_tiers": []   }}}
+      var s = JSON.stringify(wiera.wieraPolicy, null, 2);
+      console.log(s);
+      
+
     </script>
 
 
