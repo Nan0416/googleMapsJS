@@ -9,12 +9,40 @@
         var temp = document.getElementById("print_1").innerHTML;
         document.getElementById("print_1").innerHTML = temp + str;
       }
+
+      function syntaxHighlight(json){
+        var json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+          var cls = 'number';
+          if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+              cls = 'key';
+            } else {
+              cls = 'string';
+            }
+          } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+          } else if (/null/.test(match)) {
+            cls = 'null';
+          }
+          return '<span class="' + cls + '">' + match + '</span>';
+        });
+      }
     </script>
+    <style>
+      pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+      .string { color: blue; }
+      .number { color: darkorange; }
+      .boolean { color: red; }
+      .null { color: green; }
+      .key { color: black; }
+    </style>
+
     <title>JSON Interface</title>
   </head>
   <body>
 
-    <p id = "print_1"></p>
+    <p id = "print_1" style = "white-space: pre; font-family: monospace; "></p>
     <p id = "p"></p>
     <div id = "sss"></div>
     <script>
@@ -29,9 +57,7 @@
       //document.getElementById("print_1").innerHTML = JSON.stringify(wiera.wieraPolicy, null, 1);
       //var obj = {"id":"example","desc":"example for demostration","local_instances":{"us-east":{"storage_tiers":[{"tier_name":"memcached","tier_size":"256MB","tier_type":0,"tier_location":"127.0.0.1","tier_expected_latency":0},{"tier_name":"S3","tier_size":"5G","tier_type":0,"tier_location":"127.0.0.1","tier_expected_latency":0}],"events":[{"event_type":"ActionGet","event_parameters":{},"responses":[{"reponse_type":"Retrieve","response_parameters":{}}]}]}}}
       var objs = {  "id": "example",  "desc": "example for demostration",  "local_instances": {  "us-east": {    "storage_tiers": []   }}}
-      var s = JSON.stringify(wiera.wieraPolicy, null, 2);
-      console.log(s);
-      printTo(s);
+      printTo(syntaxHighlight(JSON.stringify(wiera.wieraPolicy, null, 2)));
 
 
     </script>
