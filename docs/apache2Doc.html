@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Apache2</title>
+</head>
+<body>
+  <h3>Main configuration</h3>
+  <ol>
+    <li>
+      <h3>Structure of files</h3>
+      <p>site-avaiable VS site-enabled. mods_avaiable VS mods_enabled</p>
+      <p>file in the *enabled directories will be load automatically</p>
+      <p>Making an alias from the avaiable directories to enabled directories is the prefect way to cite mods and site(host)</p>
+    </li>
+    <li>
+      <h3>Include other configuration file</h3>
+      <p>Include /usr/local/apache2/conf/ssl.conf</p>
+      <p>Include /etc/apache2/site-availabe/defualt.conf</p>
+    </li>
+    <li>
+      <h3>KeepAlive</h3>
+      <p>This allows a presistent TCP connection that allows multiple http requests.</p>
+      <p>One TCP connection is also called a HTTP session.</p>
+    </li>
+    <li>
+      <h3>LoadModule module_name module_path</h3>
+
+    </li>
+    <li>
+      <h3>&lt;Directory path&gt;&lt;/Directory&gt;</h3>
+      <p>directive inside this part will only work on this path filesystem.</p>
+      <ul>
+        <li>AllowOveride None // this is for security when path is "/" in order to denied the .htaccess</li>
+
+      </ul>
+
+    </li>
+    <li>
+      <h3>&lt;VirtualHost *:80&gt;&lt;/VirtualHost&gt;</h3>
+      <p>Add a vhost</p>
+      <ul>
+        <li>DocumentRoot <i>path</i></li>
+        <li>ServerName <i>www.example.com</i></li>
+        <li>ServerAlias <i>*.example2.com</i></li>
+        <li>RewriteEngine On</li>
+        <li>Order deny, allow // order tell the apache the step of applying deny and allow, in this case, will allow from all.</li>
+        <li>Deny from 192.0.0.1 // deny to server the user with 192.0.0.1</li>
+        <li>Allow from all</li>
+      </ul>
+    </li>
+  </ol>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
