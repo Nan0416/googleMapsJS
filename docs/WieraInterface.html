@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script>
+        var row_id = 1;
+    </script>
+    <style>
+        body{
+            margin: 20px;
+            padding-bottom: 80px; 
+        }
+        div.regionalBox,
+        div.tieraInfo,
+        div.tiersInfo{
+            margin-left: 30px;
+            border-left: 1px #767676 solid;
+            padding-left: 5px;
+        }
+        div.regionalContent{
+            
+            padding-bottom: 6px;
+            margin-bottom: 5px;
+        }
+        table.tierInfoTable {
+            border-bottom: 1px #767676 solid;
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
+    <title>WieraInterface</title>
+    <script src = "./WieraInterfaceBuilder.js"></script>
+</head>
+
+<body>
+    <div id="wieraConfiguration">
+        <legend>
+            <h4>Wiera Instance</h4>
+        </legend>
+        <table>
+            <tbody>
+                <tr>
+                    <td><label>Wiera id</label></td>
+                    <td><input type="text" id="wieraID"></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>description</label></td>
+                    <td><input type="text" id="wieraDesc"></input>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="localInstances">
+            <h4>Local instances</h4>
+            <div class="regionalBox">
+            <div id="regionalContent1" class="regionalContent">
+                <p><label>Region #1</label><input type="text" class="regionName" id="regionName1"></input></p>
+                <div class="tieraInfo">
+                    <p><label>Tiera name</label><input type="text" class="tieraName" id="tieraName1"></input></p>
+                    
+                    <div class="tiersInfo" id="t1">
+                        <div id = "temp_0001">
+                        <script>
+                            var tableText = uiWorker.drawTierInfoTable(dataS.tierProperties, tierInfoTableClass, "t1t1Table", true);
+                            var table = document.createTextNode(tableText);
+                            document.getElementById('temp_0001').innerHTML = tableText;
+                        </script>
+                        </div>
+                        <div class = "tierAddButton">
+                            <button type="button" onclick="action.addATier(dataS.tierProperties, 'regionalContent1')">Add a new tier</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id = "addATieraButtonDiv">
+                <button type="button" onclick = "action.addATiera()">Add a new Tier</button>
+            </div>
+            </div>
+        </div>
+    </div>
+    <button type="button" onclick="gather()">try</button>
+    <script src="./generateJSON.js"></script>
+    <script>
+        function gatherTireTable(num, table, tieraInstance){
+            var i = 0;
+            console.log(table.rows.length);
+            for(; i < table.rows.length; i++){
+                var label = table.rows[i].cells[0].type;
+                
+                
+                console.log(label);
+                
+            }
+        }
+        function gather(){
+            var wiera = new Wiera();
+            
+            var regions = document.getElementsByClassName("regionalBox")[0].children;
+            var wieraId = document.getElementById("wieraID").value;
+            var wieraDesc = document.getElementById("wieraDesc").value; 
+            
+            wiera.configuration(wieraId, wieraDesc);
+            var i = 0;
+            var len = "regionalContent".length;
+            for(; i < regions.length; i++){
+                if(regions[i].className == "regionalContent"){
+                    var num = parseInt(regions[i].id.slice(len, regions[i].id.length));
+                    //==========
+                    if(!num){
+                        alert(regions[i].id);
+                    }else{
+                        
+                    }
+                    //
+                    
+                   // var region = getTheFirstChildWithClassName(getTheFirstChildWithTagName(regions[i],"p"), "regionName");
+                    var region = getTheFirstEle(regions[i],[["t", "p"], ["c", "regionName"]]);
+                    var tieraInstance = wiera.addARegionalTiera(region.value);
+                    
+                    var tieraName = getTheFirstEle(regions[i], [['t' ,'div'], ['t', 'p'], ['c', 'tieraName']]).value;
+                    tieraInstance.setName(tieraName);
+
+                    var tables = getTheFirstEle(regions[i], [['t' ,'div'], ['t', 'div']]).children;  
+                    var countI = 0;
+                    for(; countI < tables.length; countI++){
+                        //
+                        console.log(tables.length);
+                        if(tables[countI].className != "tierAddButton"){
+                            var table = getTheFirstEle(tables[countI], [['c', 'tierInfoTable']]);
+                            //console.log(table);
+                            gatherTireTable(num, table, tieraInstance);
+                        }
+                    }
+                  
+                    
+
+
+                }
+            }
+        }
+        function getTheFirstChildWithClassName(ele, className){
+            var i = 0;
+            var children = ele.children;
+            
+            for(; i < children.length; i++){
+                if(children[i].className == className){
+                    return children[i];
+                }
+            }
+        }
+        function getTheFirstChildWithTagName(ele, tagName){
+            var i = 0;
+            var children = ele.getElementsByTagName(tagName);
+            if(children.length > 0){
+                return children[0];
+            }else{
+                return null;
+            }
+            
+        } 
+        
+        function getTheFirstEle(ele, list){
+            //[ ['c', ''], ['t', '']]
+            var e  = 0;
+            var l = 0;
+            var temp  =ele;
+            for(;l<list.length;l++){
+                if(list[l][0] == "c"){
+                    temp = getTheFirstChildWithClassName(temp , list[l][1]);
+                }else{
+                    temp = getTheFirstChildWithTagName(temp, list[l][1]);
+                }
+            }
+            return temp;
+
+        }
+        
+        
+    </script>
+</body>
+
+</html>
