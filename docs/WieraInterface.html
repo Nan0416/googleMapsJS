@@ -28,6 +28,40 @@
             margin-bottom: 5px;
         }
     </style>
+    <script>
+    // helper
+      function printTo(str){
+        
+        document.getElementById("print_1").innerHTML = str;
+      }
+
+      function syntaxHighlight(json){
+        var json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+          var cls = 'number';
+          if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+              cls = 'key';
+            } else {
+              cls = 'string';
+            }
+          } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+          } else if (/null/.test(match)) {
+            cls = 'null';
+          }
+          return '<span class="' + cls + '">' + match + '</span>';
+        });
+      }
+    </script>
+    <style>
+      pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+      .string { color: blue; }
+      .number { color: darkorange; }
+      .boolean { color: red; }
+      .null { color: green; }
+      .key { color: black; }
+    </style>
     <title>WieraInterface</title>
     <script src = "./WieraInterfaceBuilder.js"></script>
 </head>
@@ -55,7 +89,7 @@
             <h4>Local instances</h4>
             <div class="regionalBox">
             <div id="regionalContent1" class="regionalContent">
-                <p><label>Region #1</label><input type="text" class="regionName" id="regionName1"></input></p>
+                <p><label>Region</label><input type="text" class="regionName" id="regionName1"></input></p>
                 <div class="tieraInfo">
                     <p><label>Tiera name</label><input type="text" class="tieraName" id="tieraName1"></input></p>
                     
@@ -80,29 +114,55 @@
         </div>
     </div>
     <button type="button" onclick="gather()">try</button>
+    <p id = "print_1" style = "white-space: pre; font-family: monospace; "></p>
     <script src="./generateJSON.js"></script>
     <script>
-        function gatherTireTable(num, table, tieraInstance){
+        function gatherTireTable(table, tieraInstance){
+            var noS = table.getElementsByClassName("noS");
             var i = 0;
-            console.log(table.rows.length);
-            for(; i < table.rows.length; i++){
-                var label = table.rows[i].cells[0].type;
+            var rs = [];
+            for(; i < noS.length; i++){
+                var j = 0;
                 
-                
-                console.log(label);
-                
+                var name = noS[i].getElementsByTagName('label')[0].innerHTML;
+                var value = noS[i].getElementsByTagName('input')[0].value;
+
+                for(; j < dataS.tierProperties.length; j++){
+                    if(dataS.tierProperties[j].name == name){
+                        rs[rs.length] = [ dataS.tierProperties[j].value ,value];
+                    }
+                }
             }
+            var bu = table.getElementsByClassName('rowID');
+            
+            i = 0;
+            for(; i < bu.length; i++){
+                var j = 0;
+                var sele = bu[i].getElementsByClassName('selectC')[0];
+                var name = sele.options[sele.selectedIndex].text;
+                var value = bu[i].getElementsByTagName('input')[0].value;
+               // console.log(name,value);
+                for(; j < dataS.tierProperties.length; j++){
+                    //console.log(dataS.tierProperties[j].name, name);
+                    if(dataS.tierProperties[j].name == name){
+                        
+                        rs[rs.length] = [ dataS.tierProperties[j].value ,value];
+                    }
+                }
+            }
+            tieraInstance.addATier(rs);
+           // console.log("call");
+
         }
         function gather(){
             var wiera = new Wiera();
-            
             var regions = document.getElementsByClassName("regionalBox")[0].children;
             var wieraId = document.getElementById("wieraID").value;
             var wieraDesc = document.getElementById("wieraDesc").value; 
-            
             wiera.configuration(wieraId, wieraDesc);
             var i = 0;
             var len = "regionalContent".length;
+            
             for(; i < regions.length; i++){
                 if(regions[i].className == "regionalContent"){
                     var num = parseInt(regions[i].id.slice(len, regions[i].id.length));
@@ -112,12 +172,12 @@
                     }else{
                         
                     }
-                    //
                     
-                   // var region = getTheFirstChildWithClassName(getTheFirstChildWithTagName(regions[i],"p"), "regionName");
+                    
+
                     var region = getTheFirstEle(regions[i],[["t", "p"], ["c", "regionName"]]);
                     var tieraInstance = wiera.addARegionalTiera(region.value);
-                    
+                   // console.log(wiera);
                     var tieraName = getTheFirstEle(regions[i], [['t' ,'div'], ['t', 'p'], ['c', 'tieraName']]).value;
                     tieraInstance.setName(tieraName);
 
@@ -125,19 +185,16 @@
                     var countI = 0;
                     for(; countI < tables.length; countI++){
                         //
-                        console.log(tables.length);
+                        ///console.log(tables.length);
                         if(tables[countI].className != "tierAddButton"){
                             var table = getTheFirstEle(tables[countI], [['c', 'tierInfoTable']]);
-                            //console.log(table);
-                            gatherTireTable(num, table, tieraInstance);
+                            gatherTireTable(table, tieraInstance);
                         }
                     }
-                  
-                    
-
-
                 }
             }
+           
+            printTo(syntaxHighlight(JSON.stringify(wiera.wieraPolicy, null, 2)));
         }
         function getTheFirstChildWithClassName(ele, className){
             var i = 0;

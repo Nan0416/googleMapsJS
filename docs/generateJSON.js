@@ -39,6 +39,7 @@ function Tiera(wiera, region){
   this.wiera = wiera;
   this.region = region;
   this.tierOrder = new Array();
+  this.counter = 0;
   this.tieraName = null;
   this.wieraTieraPolicyDelegate = null;
   this.setName = function(name){
@@ -48,22 +49,15 @@ function Tiera(wiera, region){
     this.wieraTieraPolicyDelegate = this.wiera.wieraPolicy[this.wiera.localInstancesKey][this.region];
   }
 
-
-  this.addATier = function(name, size, type, location, expected_latency){
-
-    if(this.wieraTieraPolicyDelegate[this.tieraName].length != this.tierOrder.length){
-      return;
-    }
-    var len = this.tierOrder.length;
+   this.addATier = function(args){
     var assemble = new Object();
-    assemble[NAME_KEY_CONSTANT.tierName] = name;
-    assemble[NAME_KEY_CONSTANT.tierSize] = size;
-    assemble[NAME_KEY_CONSTANT.tierType] = type;
-    assemble[NAME_KEY_CONSTANT.tierLocation] = location;
-    assemble[NAME_KEY_CONSTANT.tierExpectedLatency] = expected_latency;
-
-    this.tierOrder[len] = name;
-    this.wieraTieraPolicyDelegate[this.tieraName][len] = assemble;
+    var i = 0;
+    for(; i < args.length; i++){
+      assemble[args[i][0]] = args[i][1];
+    }
+    this.wieraTieraPolicyDelegate[this.tieraName][this.counter] = assemble;
+    this.counter += 1;
+    
   }
 
   this.addAEvent = function(type, parameters, responses){

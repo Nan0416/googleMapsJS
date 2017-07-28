@@ -62,12 +62,12 @@ function UIWorker() {
         var i = 0;
         for (; i < data.length; i++) {
             if (!data[i].optional) {
-                var temp = '<tr><td><label>' + data[i].name + '</label></td><td><input type="' + data[i].value_type + '" class="' + tierRowClass + '"></input></td></tr>';
+                var temp = '<tr class = "noS"><td><label>' + data[i].name + '</label></td><td><input type="' + data[i].value_type + '" class="' + tierRowClass + '"></input></td></tr>';
                 str += temp;
             }
         }
 
-        str += '<tr><td><button type="button" onclick="action.addAnOptionalRow(dataS.tierProperties, selectElementClass,\'' + tableId + '\')">add a new property</button></td>';
+        str += '<tr class="bu"><td><button type="button" onclick="action.addAnOptionalRow(dataS.tierProperties, selectElementClass,\'' + tableId + '\')">add a new property</button></td>';
         if (!initial) {
             // add remove button
             str += '<td><button type="button" onclick="action.removeATier(\'' + tableId + '\')">remove this tier</button></td>';
@@ -114,6 +114,7 @@ function Action() {
         var len = table.rows.length;
         var row = table.insertRow(len - 1);
         row.setAttribute('id', "rowID" + rowID);
+        row.setAttribute('class', 'rowID');
         var cell1 = row.insertCell(0);
         var cell2 = row.insertCell(1);
         var cell3 = row.insertCell(2);
@@ -126,7 +127,7 @@ function Action() {
 
     }
     this.removeAnOptionalRow = function (rowId) {
-        // console.log("rowid ", rowId);
+        
         var self = document.getElementById(rowId);
         var parent = document.getElementById(rowId).parentElement;
         parent.removeChild(self);
@@ -158,7 +159,8 @@ function Action() {
 
         var self = document.getElementById(tabelID);
         var parent = document.getElementById(tabelID).parentElement;
-        parent.removeChild(self);
+        var gparent = parent.parentElement;
+        gparent.removeChild(parent);
 
     }
     this.addATiera = function () {
