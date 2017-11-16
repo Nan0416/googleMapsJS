@@ -13,8 +13,7 @@
                     Suppose a scenario that we have three machines, host A, host B and host C. For some reasons,
                      host A and host C cannot communicate with each other. But host B can communicate with host A and host C.
                     One possible reason is that host A and host C are in two different networks, host B has two network interfaces that connect to 
-                    the networks where host A and host C are, respectively. So intuitively, we want host B helps to forward traffic if host A and host C want to
-                    communicate. 
+                    the networks where host A and host C are, respectively. So intuitively, we want host B helps to forward traffic between A and host C.
                 </p>
                 <p>Solution</p>
                 <p>By using ssh -L we can achieve this.Suppose host A has IP 10.130.250.12, host B has IP 10.130.250.65 and 172.16.221.3, host C has IP 172.16.221.128. 
