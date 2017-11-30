@@ -1,0 +1,39 @@
+/* a ul tag whose id = nav*/
+
+ul#nav{
+    background-color: #4f84c4;
+    position: fixed; /* always on the top, it is now relative to the viewport. It does not have any parent container.*/
+    width: 100%; /* relative to the browser */
+    top:0; /* default value of top,bottom,left and right are auto, which may follow its slibing.*/
+    z-index: 100; /* always on the top*/
+    list-style-type: none; /* remove any decoration. e.g. the little circle */
+    margin: 0;
+    padding: 0;
+  }
+  a{
+    text-decoration: none;
+  }
+  ul#nav li{
+    display: inline-block;
+    /*border: 1px solid red;*/
+    outline: 1px solid #3f699b; /* outline cannot customize edges, do not take space*/
+    /*customized: keep the line height same*/
+    height: 40px;
+     /* change the number = 1 / #item */
+    width: 20%;
+    text-align: center;
+    line-height: 40px;
+    margin: 0;
+    padding: 0;
+  }
+  ul#nav li a{
+
+    color:white;
+    font-family: SourceSansProBold,Arial,sans-serif;
+    font-size: 18px;
+    padding: 0;
+    margin: 0;
+  }
+  ul#nav li:hover{
+    background-color: #3f699b;
+  }

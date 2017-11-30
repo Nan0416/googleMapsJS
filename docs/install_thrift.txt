@@ -1,0 +1,59 @@
+sudo apt-get install automake bison flex g++ git libevent-dev libssl-dev libtool make pkg-config ant
+sudo apt-get install libboost-dev libboost-test-dev libboost-program-options-dev libboost-system-dev libboost-filesystem-dev  libtool flex   libssl-dev
+
+
+wget http://apache.claz.org/thrift/0.10.0/thrift-0.10.0.tar.gz
+tar -zxvf thrift-0.10.0.tar.gz 
+
+./configure
+
+thrift 0.10.0
+=========output==========
+Building Plugin Support ...... : yes
+Building C++ Library ......... : yes
+Building C (GLib) Library .... : no
+Building Java Library ........ : yes
+Building C# Library .......... : no
+Building Python Library ...... : yes
+Building Ruby Library ........ : no
+Building Haxe Library ........ : no
+Building Haskell Library ..... : no
+Building Perl Library ........ : no
+Building PHP Library ......... : no
+Building Dart Library ........ : no
+Building Erlang Library ...... : no
+Building Go Library .......... : no
+Building D Library ........... : no
+Building NodeJS Library ...... : no
+Building Lua Library ......... : no
+
+C++ Library:
+   Build TZlibTransport ...... : yes
+   Build TNonblockingServer .. : yes
+   Build TQTcpServer (Qt4) .... : no
+   Build TQTcpServer (Qt5) .... : no
+
+Java Library:
+   Using javac ............... : javac
+   Using java ................ : java
+   Using ant ................. : /usr/bin/ant
+
+Python Library:
+   Using Python .............. : /usr/bin/python
+   Using Python3 ............. : /usr/bin/python3
+
+======================================
+
+make
+
+make check
+sudo make install
+
+# for python
+cd ~/thrift-0.10.0/lib/py
+sudo python setup.py install
+
+
+$vim ~/.bashrc
+export LD_LIBRARY_PATH=/usr/local/lib/:${LD_LIBRARY_PATH}
+$source ~/.bashrc

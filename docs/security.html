@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="description" content="Personal Notes">
+      <meta name="keywords" content="HTML,CSS,JavaScript, Secuirty, Cryptography">
+      <meta name="author" content="Nan Qin">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Computer Security</title>
+    <style>
+
+      body{
+        margin:0;/* body default margin is 8px */
+      }
+
+
+
+    </style>
+    <link rel="stylesheet" type="text/css" href="./css/navigationbar.css">
+    <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
+    <link rel="stylesheet" type="text/css" href="./css/content.css">
+  </head>
+  <body>
+    <ul id="nav">
+      <li><a class="active">Home</a></li><!-- remove the space between inlined elements
+    --><li><a href="#1">Security</a></li><!--
+    --><li><a href="#2">OS</a></li><!--
+    --><li><a href="#3">Networking</a></li><!--
+    --><li><a href="#3">Tools</a></li>
+
+    </ul>
+
+
+
+    <ul id="sidebar">
+        <li><a href="#distributedsystems">Distributed Systems</a></li>
+        <ol class="dropdown">
+          <li><a href="#">Frameworks</a></li>
+        </ol>
+        <li><a href="security.html">Security</a></li>
+        <ol class="dropdown">
+          <li><a href="security.html#crypto">Cryptography</a></li>
+        </ol>
+        <li><a href="webdesign.html">Web design</a></li>
+        <ol class="dropdown">
+          <li><a href="webdesign.html#html">HTML</a></li>
+          <li><a href="webdesign.html#css">CSS</a></li>
+        </ol>
+        <li><a href="#3">Web servers</a></li>
+        <ol class="dropdown">
+          <li><a href="#">Apache2</a></li>
+        </ol>
+        <li><a href="#tools.html">Tools</a></li>
+        <ol class="dropdown">
+
+        </ol>
+      </ul>
+
+    <div id="content-div">
+      <h2>Computer Security</h2>
+      <p>
+        Topics include cryptography and computer software that are secure sensitive.
+      </p>
+      <h3 id="network_security">Network Security</h3>
+      <p>The inital network design is <span class="word">end-to-end</span>, which means the devices between two computers are just routers with limited intelligence.
+        However, as the network becomes complex, the issue of security also increases significantly.
+      </p>
+      <ol class="section-list">
+        <li>Firewall: like a router to forward packets, but it may deny to forward some packets accroding to a-priori rules by checking headers
+          <ol>
+            <li>Most firewalls prevent traffic from the outside (incoming traffic)</li>
+            <li>Also may prevent inside users to communicate with outside</li>
+            <li>Default behavior: deny and provide whitelist</li>
+            <li>Sophisticated firewall: (proxy) can check packets' contents.</li>
+            <li>Stateful filtering: Dealing with reply message. e.g. client 132.21.3.2:12304 -> www.google.com:80,
+              then we rememeber this info and allow www.google.com -> 132.21.3.2:12304</li>
+            <li>Circuit-level proxying: standard protocol: SOCKS. Inside the firewall, one socket connects to client, one socket connects to server.
+              firewall check and copy data from one socket to another socket.
+            </li>
+            <li>Application-level proxying: e.g. HTTP proxy.</li>
+          </ol>
+        </li>
+        <li>
+          (Network level) Intrusion detection systems (IDS): a middle-box device tells us that we are under attacking.
+          <ol>
+            <li>Decision used to check whether it is an attacking is made on the fly. V.S. firewall policies are pre-determined.
+            </li>
+            <li>Signature matching: signature is a pattern that matches known bad behavior. Cons 1). Defender must know the attacking before. it won't work for novel attacks. 2). Often easy to attack around.</li>
+            <li>Anomaly detection: learn pattern of normal behavior. Cons: 1). if the normal behavior is very diverse, then it is hard to detect.
+              2). hard to avoid false positive 3). adversary can train over time.</li>
+          </ol>
+
+
+        </li>
+        <li>Tunneling: Against firewall
+          <ol>
+            <li>Any data can be transmitted on any channel, if both sides agree.</li>
+            <li>e.g. Encapsulate IP packets over ssh connection.</li>
+            <li>SSH can be used to tunnel almost any traffic.</li>
+          </ol>
+        </li>
+      </ol>
+      <h3 id="crypto">Cryptography</h3>
+      <p>This section introduces the basic concepts of cipher. Following, a couple of popular ciphers are shown.</p>
+      <ol class="section-list">
+        <li>
+          <h4>Concepts</h4>
+          <ol class="subsection-list">
+            <li>Cipher: an <span class="word">algorithm</span> for performing encryption or decryption.</li>
+            <li>cryptography: the study of <span class="word">designing</span> cipher algorithms.</li>
+            <li>cryptanalysis: the study of <span class="word">breaking</span> cipher algorithms.</li>
+            <li>cryptology: cryptography and cryptanalysis</li>
+            <li>Kerckhoffs's principle: [in 19th century] an cipher aglorithm should be secure even if the implementation is public known.
+              Modern cryptography embraces openness.</li>
+            <li>Symmetric key cryptography: one key for encryption and decryption. The key is secret and shared only by people who should know.</li>
+            <li>Public key cryptography: one key for encryption and another key for decryption. Private key is only known by owner, public key can
+               be known by anyone. 1). invented in 1970s; 2). Depends on fancier math; 3). Makes key distribution easier.</li>
+            <li>Integrity: massage integrity cannot be guaranteed by encryption.</li>
+            <li>Secure channel: Using cryptography to construct a secure channel to transmit data securely. e.g. HTTP login, chatting software.
+              Consideration: adversary can read and modify ciphertext. So secure channel must deliver message intact and in order.
+              Moreover, we must exchange the symmetric key before setting up the secure channel. And we usually use public key cryptography to exchange the symmetric key. And use symmetric key to set
+              up the secure channel.
+            </li>
+            <li>key size: Modern symmetric key size at least 2^128.</li>
+            <li>Scenarios of Attacks
+              <ol>
+                <li>Known ciphertext: a attacker knows ciphertext.</li>
+                <li>Known plaintext: a attacker knows a pair of plaintext and ciphertext that used in the past.</li>
+                <li>Chosen plaintext: a attacker could choose a plaintext to encrypt and get the ciphertext.</li>
+                <li>Chosen ciphertext: a attacker can encrypt any plaintext and decrypt any ciphertext except the one we want to keep secret.</li>
+              </ol>
+            </li>
+            <li>
+              Random oracle paradigm: a black box that returns a uniform random number for any different input.
+            </li>
+            <li>NIST (US National Institute of Standards and Technology): a neutral organization to compete cipher aglorithms in cryptography.</li>
+            <li>NSA (National Security Agency): for "signals intelligence"-> getting information from digital signals. Break the encryption of
+              everyone in the world. Help US encryption not be broken by foreign powers.</li>
+            <li>Stream ciphers (out of fashion): a key used to generate a long pseudorandom bitstream. And then xor with the message.
+              <ol>
+                <li>+Easy to implement in hardware</li>
+                <li>-Stream cipher mutability: a attacker can guess the structure of security data, and modify part of the ciphertext. Then the obtained plaintext
+                  will be exactly flipped those bits.
+                </li>
+              </ol>
+            </li>
+            <li>Block ciphers: plaintext is divided into fixed length blocks. ciphertext_block = Ciphers(Key, plaintext_block). It is insecure if block size is too small. Current size
+              is 128 bits.
+              <ol>
+                <li>Confusion: combine elements so none can be analyzed individually.</li>
+                <li>Diffusion: spread the effect of one symbol around to others. Changing one part, the effect will also be reflected to others.</li>
+                <li>Substitution/permutation network (e.g. AES): general structure for building block ciphers. 1). Subsitution: an invertible mod lookup table. 2). Permutation: shuffle bit (diffusion).</li>
+              </ol>
+            </li>
+            <li>
+              Mode operation: break a arbitary length of data into blocks, and apply the block cipher. e.g. ECB.
+            </li>
+            <li>
+             stream mode:
+            </li>
+            <li>
+              Birthday paradox: describe that hash function collision is easy to happen. C(n,2 )= n^2, n^2 pairs
+            </li>
+            <li>
+              Birthday attack: find hash function's collision.
+            </li>
+          </ol>
+        </li>
+        <li>
+          <h4>Symmetric stream ciphers</h4>
+          <ol class="subsection-list">
+            <li>
+              <h4>Caesar [凯撒] cipher</h4>
+              <p>Shift plaintext </p>
+            </li>
+            <li>
+              <h4>Rot-13</h4>
+              <p>same as ..</p>
+            </li>
+            <li>
+              <h4>One Time pad (inpractical)</h4>
+              <p>A random key whose length is same as the secret message (inpractical). <span class="emphasis">Ciphertext = K xor Plaintext; Plaintext = K xor Ciphertext;</span></p>
+            </li>
+            <li>
+              <h4>RC4</h4>
+              <p>Fast, simple, widely used software stream software.</p>
+              <p>WEP used RC4 in a wrong way.</p>
+            </li>
+          </ol>
+          </li>
+          <li>
+          <h4>Mode operation</h4>
+          <ol class="subsection-list">
+            <li>
+              <h4>ECB (Electronic Codebook)</h4>
+              <ol>
+                <li>Split into blocks and apply cipher to each one individually.</li>
+                <li><span class="word">Bad idea: </span> block cipher with a specific key is a deterministic function, y = F(K, x). If two cipherblocks are same, it would mean the corresponding
+                  plaintext blocks are also same. (leaking information)
+                </li>
+                <li>e.g. Image encrypted by DES in ECB mode, you are still find the outline of things in the image.</li>
+              </ol>
+            </li>
+            <li>
+              <h4>CBC (Cipher Block Chaining)</h4>
+              <ol>
+                <li>Ci = Ek(Pi xor Ci-1) // Ek is Encryption(K, x)</li>
+                <li>Plaintext changes propagrate forever: If p2 changes, then c2, c3, c4 ... all will change.</li>
+                <li>Ciphertext change only two plaintext blocks changed. If c3 changes, then only p4 and p3 change.</li>
+                <li>Initialization vector: C0, C0 is not a secret message, but it is randomly generated (nonce: not predicatible)</li>
+                <p><img src="./images/cbc-encryption-mode.png" alt="cbc encryption mode" width="450px" height="200px"></p>
+              </ol>
+            </li>
+          </ol>
+          </li>
+          <li>
+          <h4>Stream modes: take a block cipher and a key to generate a key stream and xor with plaintext</h4>
+          <ol class="subsection-list">
+            <li>
+              <h4>OFB (output feedback)</h4>
+              <ol>
+                <li>Drawback: if key size is small, it may lead collision of keystream. And the ciphertext may be repeated.</li>
+                <p>
+                  <img src="./images/ofb_mode.png" alt="ofb mode" width="450px" height="200px">
+                </p>
+              </ol>
+
+            </li>
+            <li>
+              <h4>CTR (couter mode)</h4>
+              <ol>
+                <li>Advantage: can start from middle because counter is predicatible.</li>
+                <p>
+                  <img src="./images/ctr_mode.png" alt="ctr mode" width="450px" height="200px">
+                </p>
+              </ol>
+
+            </li>
+          </ol>
+          </li>
+          <li>
+          <h4>Symmetric block ciphers</h4>
+          <ol class="subsection-list">
+            <li>
+              <h4>AES (advanced encryption standard: very secure)</h4>
+              <ol>
+                <li><a href="http://www.formaestudio.com/rijndaelinspector/archivos/Rijndael_Animation_v4_eng.swf">Animation</a></li>
+                <li>128-bit block, 128/192/256-bit key. Fast software implement, x86 has insns instruction for AES.</li>
+                <li>128-bit has 10 round</li>
+                <li>The lookup table and mixcolumn's matrix are fixed.</li>
+                <li>Round key are expanded by the key schedule. Also use the same lookup table.</li>
+              </ol>
+            </li>
+            <li>
+              <h4>DES (data encryption standard: predecessor of AES)</h4>
+              <p>Not secure: brute force due to small size of key.</p>
+            </li>
+
+            <li>
+              <h4>Feistel cipher</h4>
+              <p>+ the process as a whole is revertible, even if F is not revertible.</p>
+            </li>
+          </ol>
+        </li>
+      </ol>
+
+
+      <h3>Cryptography Hash functions</h3>
+
+        <p>  Ideal model: take aribitary input return fixed length output. No collision (big output space), not invertible.
+          For a cryptography hash function, we don't want the attacker "pre-image" (inversion) this function. i.e. given
+          output to find input. Second preimage (targeted collision): finding H(x') == H(x) but x' != x.
+        </p>
+        <p>If output length is k, preimage and second preimage complex is 2^k, but collision has complexity 2^k/2. </p>
+        <p>To avoid collision, be conservative: if input length is about k, then output should be 2 * k.</p>
+        <p>History: MD5 (128-bit output: now easy to find collision) ->
+          SHA(-0: from NIST/NSA but quickly withdraw) ->
+          SHA-1 (small modification 160-bit output, but the real collision is just 2^60 not 2^80, first collision in 2017) ->
+          SHA-2 (output 224 256 384 512 bits, still length extension problem) ->
+          SHA-3 (fixed length extension in 2015)
+        </p>
+        <p>Length extension problem (not ideal): hash function (md5 sha-1 sha-2) take fixed lenght input H(A||B) may equal to H(A).</p>
+
+
+      <h3>Intergrity</h3>
+      <p>
+      </p>
+
+      <ol class="section-list">
+        <li>
+            <h4>MAC (message authentication code)</h4>
+            <p>Prove the message has not been modified. Input(message, key) = MAC. Receiver use the received message and pre known key to
+              recompute the MAC, then compare the two MAC. MAC's kye is usually different from encryption key.
+            </p>
+
+        <ol class="subsection-list">
+          <li>
+            <h4>CBC-MAC</h4>
+            <p>CBC-MAC: start VI = 0, to encrypt the message and take the last cipher block as the key.
+              For security reason, that we can only use the 0 as VI and last cipher as MAC.
+            </p>
+          </li>
+          <li>
+              <h4>HMAC : common</h4>
+              <p>
+                HMAC: H(K xor a || H(K xor b || MAC)) // using hash function twice.
+                H(K || M), H(M || K): insecure due to length extension.
+              </p>
+          </li>
+          <li>
+            <h4>How to apply?</h4>
+            <p>
+              Encrypt and MAC separately. Cipher= Encrypt(K1 , Plain) || MAC(K2, Plain). This is  a bad design
+              since encrypt only protect confidentiality and MAC only protect integrity. Therefore, we can use MAC(K2, Plain) to get the plaintext.
+
+            </p>
+            <p>
+              Encrypt then MAC: has cleanest formal safety proof.
+            </p>
+            <p>
+              First MAC then Encrypt: preferred by practical reasons.
+            </p>
+        </li>
+        <li>
+          <h4>GCM (Galois Counter Mode) ???</h4>
+          <p></p>
+        </li>
+      </ol>
+    </li>
+    <li>
+          <h4>Ordering and message number</h4>
+          <p>When sending data, we break them into small packets. Attacker can reorder them, so we assign each one with a sequence number. If we detect out-of-order/duplicated, we just ignore them.
+            Sequence number is inside MAC.
+          </p>
+    </li>
+     <li>
+          <h4>Padding</h4>
+          <p>When the plaintext is not long enough to satisfy the cipher block (e.g. 128-bit). It will be padded with 1, 2,2 ,3,3,3 up to 16 bytes.</p>
+          <p>When recover plaintext, decrypt -> remove padding -> compute MAC -> compare MAC </p>
+          <p>Padding oracle attack: timing attack: suppose the server's response time depends on whether the padding is correct or not.
+            (This assumption is reasonable, because we developer may not compute the MAC when detecting a wrong padding.) By controlling the ciphertext, attacker can modify the padding bytes.
+
+          </p>
+    </li>
+  </ol>
+
+      <h3>Public key cryptography: generalized block cipher: separate encryption key and decryption key (secret).</h3>
+      <p>
+        Analogy: Alice wants to send Bob a gift in a locked box. In a symmetric key scenario, both Alice and Bob has the same key. But in public key mode, each person has a private key (key) and a public key
+        (lock). The immportant feature of public key is that the physical locks are commute <span class="word">Ek1(Ek2(M)) = Ek2(Ek1(M))</span>.
+
+        </p>
+        <p>
+        Alice sends this gift and locks it with her lock kA: EkA(gift). Send to Bob. Bob lock it with his lock. EkB(EkA(gift)). Send to Alice.
+        Alice unlock her lock. DkA(EkB(EkA(gift))) =  DkA(EkA(EkB(gift))) = EkB(gift). Send to Bob. Bob unlock his lock and get the message.
+
+      </p>
+      <p>Modular arithmetic: <a href="https://nrich.maths.org/2200">math</a>
+        <ol>
+          <li>x = y mod n. Given y and n, we know x. e.g. 10 mod 3 = 1. </li>
+          <li>given x and n we cannot know y. e.g. 1 = y mod 3. y = 1, 4, 7 ... </li>
+          <li> (g^b (mod p))^a (mod p) = g^ab mod p.</li>
+        </ol>
+
+      </p>
+      <p>
+        Diffie-Hellman key exchange: assumption: we are in a unsecure channel, but we are telling to the right person. Finally, we will reach a final shared key.
+        The key is computed on the fly.
+        <ol>
+          <li>Alice has secret a = 3, Bob has secret b = 4. And two public parameters p = 10 and g = 12.</li>
+          <li>Alice -> Bob: A = g^a mod p = 12 ^ 3 mod 10 = 8.</li>
+          <li>Bob -> Alice: B = g^b mod p = 12 ^ 4 mod 10 = 6.</li>
+          <li>Attacker can capture 8 and 6. However, knowing 8 and 6, the attacker cannot know a and b. since 8 = 12^a mod 10. 12^a has mulitple solution.</li>
+          <li>Alice computes B^a mod p = (g^b (mod p))^a (mod p)= 6^3 mod 10 = 6.</li>
+          <li>Bob computes A^b mod p = (g^a (mod p))^b (mod p) = 8^4 mod 10 = 6.</li>
+          <li>6 is just the secret key.
+            Suppose g^b = np + c, then (g^b (mod p))^a (mod p) = c^a mod p.
+            And because g^ab mod p = (np + c)^a mod p = c^a mod p. We have (g^b (mod p))^a (mod p) = g^ab mod p.
+            We can prove that g^ab mod p == (g^a (mod p))^b (mod p). So (g^a (mod p))^b (mod p) == (g^b (mod p))^a (mod p).
+          </li>
+        </ol>
+      </p>
+
+      <ol class="section-list">
+
+      </ol>
+      <h3>Signature scheme: generalized MAC: separate signing key (secret) and verification key.</h3>
+      <p></p>
+      <ol class="section-list">
+
+      </ol>
+
+    </div>
+  </body>
+</html>

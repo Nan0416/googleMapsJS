@@ -1,0 +1,41 @@
+
+/*fixed, left 0, top 41px, bottom 0, width 200px; */
+  ul#sidebar{
+    position: fixed;
+    /* modified accroding to enviroment*/
+    top: 41px;
+    bottom: 0px;
+    left:0;
+    width: 250px;
+    /*border: 3px solid green;*/
+    background-color: yellow;
+    margin: 0;
+    padding: 0 0 0 5px;
+    
+    list-style-type: circle;
+    list-style-position: inside;
+    overflow: auto;
+    /*background-color: #b5d1ff;*/
+  }
+  ul#sidebar > li{
+    margin: 0;
+    padding: 0;
+    height: 28px;
+    line-height: 28px;
+  }
+  ul#sidebar > li > a{
+    color: black;
+    font-size: 19px;
+  }
+  ul#sidebar > ol.dropdown > li > a{
+    color: black;
+    font-size: 16px;
+  }
+  ul#sidebar > ol.dropdown{
+    list-style-type: decimal;
+    list-style-position: inside;
+  }
+  ul#sidebar > ol.dropdown > li > a:hover{
+    /*color: blue;*/
+    color:blue;
+  }

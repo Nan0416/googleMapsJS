@@ -1,0 +1,25 @@
+div#content-div{
+        position: relative;
+        margin: 41px 0 0 253px;
+        border: 3px solid red;
+        padding: 0 0 0 15px;
+
+      }
+      span.word, span.emphasis{
+        font-weight: bold;
+        font-style: italic;
+      }
+      .section-list{
+        list-style-type: upper-roman;
+        list-style-position: inside;
+      }
+      .section-list li{
+        padding: 0;
+      }
+      .subsection-list{
+        list-style-type: decimal;
+      }
+      .subsection-list li{
+        padding: 0;
+        line-height: 1.4em;
+      }
