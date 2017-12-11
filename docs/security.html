@@ -471,6 +471,44 @@
               I copy B's response to A.</li>
           </ol>
         </li>
+        <li>
+          <h4>(Public) key distribution</h4>
+          <ol>
+            <li>Get the correct public key for right person.
+            </li>
+            <li>Symmetric key servers: users share keys with (trusted) server, server distriuted session keys.
+            </li>
+            <li>Public key based key distribution. Certificate X.509: A name and a public key signed by someone(ceritficate authority) else. Ca = signByS(A, A-public-key)</li>
+            <li>PGP:(poineer of CA, no central server): every is potentially a CA: trust people you know.</li>
+          </ol>
+        </li>
+        <li>
+          <ol>
+            <h4>CA hierarchies</h4>
+            <ol>
+             <li>Organize CAs in a tree.</li>
+             <li>Enterprise PKI (public key infrastructure) links up with permissions.</li>
+             <li>Revocation: 1. short expiration times (bad scalability) 2. certificate revocation lists 2. certificate status online checking API</li>
+            </ol>
+          </ol>
+        </li>
+        <li>
+          <h4>SSL/TLS</h4>
+          <ol>
+            <li>Public key for distributing session key and mac key</li>
+            <li>
+              Developed by netscape SSL1.0 (never released) -> SSL2.0 (one year) -> SSL3.0 (better) -> go to RFC process, renamed to TLS 1.0 -> TLS 1.1, 1.2
+              
+            </li>
+            <li>
+              TLS 1.0 use previous the cipher text as the CBC IV (Initilization vector)
+            </li>
+            <li>
+              compression oracle vulnerabilities: compress(S || A), S is secret data, A is attacker-controlled data. If A is similar to S, then then it compresses better.
+            </li>
+
+          </ol>
+        </li>
       </ol>
       <h3>Signature scheme: generalized MAC: separate signing key (secret) and verification key.</h3>
       <p></p>
