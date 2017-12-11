@@ -164,6 +164,7 @@
             <li>
               Birthday attack: find hash function's collision.
             </li>
+            <li>Nonce: a value chosen to make a message unique. Used to prevent a reply attack.</li>
           </ol>
         </li>
         <li>
@@ -322,8 +323,10 @@
             </p>
         </li>
         <li>
-          <h4>GCM (Galois Counter Mode) ???</h4>
-          <p></p>
+          <h4>GCM (Galois Counter Mode)</h4>
+          <p>In traditional encry & Mac authentication, we need to do twice. This is expensive. "Authenticated encryption" modes do both at once.
+            Higher preformance. 
+          </p>
         </li>
       </ol>
     </li>
@@ -380,9 +383,94 @@
           </li>
         </ol>
       </p>
-
+      <p>
+        Public key size must be 10 times larger than security level. (up to 768bits, and usually 2048 bit).
+        Elliptic curves: objects from higher math with analogous group structure 2 * security level.
+      </p>
+      
       <ol class="section-list">
+        <li>
+          <h4>RSA</h4>
+          <ol>
+            <li>n = pq two large primes, n is public, p and q are secret. Because n is large, it is hard to guess p and q from n. n (2000 or more bits lang.)
+              将两个大质数相乘十分容易，但是想要对其乘积进行因式分解却极其困难.
+            </li>
+            <li>modular exponentiation - c mod m = (a ⋅ b) mod m, c mod m = [(a mod m) ⋅ (b mod m)] mod m</li>
+            <li>choose e and d such that : M^ed mod n = M </li>
+            <li>Public key: (n, e); C = M^e mod n (M < n)</li>
+            <li>Private key: (n, d); C^d = M^ed mod n = M;</li>
+            <li>Euler: ø(n) 与n互质且小于n的数。ø（p）= p - 1 if p is prime.</li>
+            <li>随便找一个e < ø(n), and e ø(n)互质</li>
+            <li>找 M^ed mod n = M; -> (M^(ed-1) mod n)(M mod n) = M; -> M^(ed - 1) mod n = 1; -> M^(ed-1) = 1 (mod n);</li>
+            <li>欧拉定理： a^ø(n) = 1 (mod n); so 找 ed - 1 = ø(n); ø(n) = ø(p * q) = (p -1)*(q -1);</li>
+            <li>ed - 1 = (p-1)(q - 1)</li>
+            
+          </ol>
+        </li>
+        <li>
+          <h4>Hybrid encryption</h4>
+          <ol>
+            <li>Practical application</li>
+            <li>Public-key operations are slow, and complicated.</li>
+            <li>Only applied it at the startup time to set up the symmetric session keys.</li>
+            <li>So we encrypt session key</li>
+          </ol>
+        </li>
+        <li>
+          <h4>Padding: to set the session key</h4>
+          <ol>
+            <li>public-key encrypted key's size does not match with the key of symmetric encryption scheme.</li>
+            <li>PKCS #1 v1.5 suggest padding with 00 01 FF FF ... FF</li>
+            <li>But choose ciphertext attacks</li>
+            
+          </ol>
+        </li>
+        <li>
+          <h4>Modern Padding</h4>
+          <ol>
+            <li>using hashing, random salt</li>
+            <li>OAEP for encryption, PSS for signing</li>
 
+          </ol>
+        </li>
+        <li>
+          <h4>KEM key Encapsulation mechanism</h4>
+          <ol>
+            <li>
+              Instead of we select the session key, choosing it randomly. And hashing the random(r) to get the 256 bits value as
+              the session key.
+            </li>
+            <li>RSA-KEM is insecure if reuse e and r with different n.</li>
+        </ol>
+        </li>
+        <li>
+          <h4>Security Properties</h4>
+          <ol>
+            <li>Non-repudiation: principal cannot later deny having made a commitment :you sign a signature, other people have a copy of that.
+              you cannot say you did not sign that later.
+            </li>
+            <li>Forward secrecy: recovering later information does not reveal past information.
+              Why session key: long term key is broken, session key is still ok.
+            </li>
+            
+          </ol>
+        </li>
+        <li>
+          <h4>Replay attack hw example.</h4>
+          <ol>
+            <li>A nonce is needed to prevent a verbatim replay of a previous message.</li>
+            <li>receiver keep track what nonce used before, one nonce can only be used once.</li>
+            <li>challenge-response authentication: receiver choose the nonce.</li>
+          </ol>
+        </li>
+        <li>
+          <h4>Chess grandmaster problem</h4>
+          <ol>
+            <li>Variant or dual of MITM: attacker has a different id.</li>
+            <li>A and B are chess master. I challenge A and B. A is black chess , B is white chess. A move first, I copy A's move to B. The B response to me,
+              I copy B's response to A.</li>
+          </ol>
+        </li>
       </ol>
       <h3>Signature scheme: generalized MAC: separate signing key (secret) and verification key.</h3>
       <p></p>
