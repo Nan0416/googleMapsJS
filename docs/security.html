@@ -557,20 +557,11 @@
             <li>PGP:(poineer of CA, no central server): every is potentially a CA: trust people you know.</li>
           </ol>
         </li>
-        <li>
-          <ol>
-            <h4>CA hierarchies</h4>
-            <ol>
-             <li>Organize CAs in a tree.</li>
-             <li>Enterprise PKI (public key infrastructure) links up with permissions.</li>
-             <li>Revocation: 1. short expiration times (bad scalability) 2. certificate revocation lists 2. certificate status online checking API</li>
-            </ol>
-          </ol>
-        </li>
+       
         <li>
           <h4>SSL/TLS</h4>
           <ol>
-            <li>Public key for distributing session key and mac key</li>
+            <li>Public key for distributing session key and mac key: verify you are connecting to the correct server.</li>
             <li>
               Developed by netscape SSL1.0 (never released) -> SSL2.0 (one year) -> SSL3.0 (better) -> go to RFC process, renamed to TLS 1.0 -> TLS 1.1, 1.2
               
@@ -581,7 +572,95 @@
             <li>
               compression oracle vulnerabilities: compress(S || A), S is secret data, A is attacker-controlled data. If A is similar to S, then then it compresses better.
             </li>
+           
+          </ol>
+        </li>
+        </ol>
+        <h3>Web security <a href="https://www.owasp.org/index.php/Main_Page">Open Web Application Security Project(OWASP)</a></h3>
+        <ol class="section-list">
+        <li>
+          <h4>CA hierarchies</h4>
+          <ol>
+          
+          
+          <li>Organize CAs in a tree.</li>
+          <li>Enterprise PKI (public key infrastructure) links up with permissions.</li>
+          <li>Revocation: 1. short expiration times (bad scalability) 2. certificate revocation lists 2. certificate status online checking API</li>
+          </ol>
+              
+        </li>
+        <li>
+          <h4>CA &amps; HTTPS &amps; EV</h4>
+          <ol>
+            <li>Verify you are telling to the right server.</li>
+            <li>Extended validation (green bar) new version</li>
+          </ol>
+        </li>
+        <li>
+          <h4>Web applications security</h4>
+          <ol>
+            <li>Web application: charge manage, manage manage, user edited data....</li>
+            <li>Server side application: PHP, Ruby, Perl.</li>
+            <li>Client-side application: Java(web server-provided), Active X(windows downloadable binary, no sandboxin), 
+              Flash (today used for customized video), JS</li>
+            <li>JS + broswer provided (created) DOM: js have security check.</li>
+            
+          </ol>
+        </li> 
+        <li>
+          <h4>Same origin policy</h4>
+          <ol>
+            <li>Origin is a tuple (Scheme, host, port)</li>
+            <li>Basic JS interact only allowed to interact with the same origin.</li>
+            <li>Different pages are managed as different applications.</li>
+          </ol>
+        </li>
+        <li>
+          <h4>GET, POST &amp; Cookies</h4>
+          <ol>
+            <li>GET: ?key=value&amp;key2=value2, query</li>
+            <li>POST: sumbit form.</li>
+            <li>Cookies: make the HTTP have states. Set by the server, store in the client, send back server.</li>
+          </ol>
+        </li>
+        <li>
+          <h4>SQL injection example. Client attacks server (without knowing the program, guess(e.g. through error message)</h4>
+          <ol>
+            <li>SQL injection example</li>
+            <li>WHERE name = '$name'</li>
+            <li>$name = me' OR '1'='1 (tautologies)</li>
+            <li>Fix: 1. avoid constructing queries as strings</li>
+            <li>Fix: 2. Web language/framework sanitizing, escape string. escape "</li>
+            <li>Lazy sanitization: whitelist</li>
+            <li><a href="https://www.netsparker.com/blog/web-security/sql-injection-cheat-sheet/#SyntaxBasicAttacks">SQL inject cheat sheet</a></li>
+            <li>Blind SQL injection: timing attack.</li>
+            <li>Experience: when attacking, don't include # (anchor) in url.</li>
+          </ol>
+        </li>
+        <li>
+          <h4>Authentication webstie</h4>
+          <ol>
+            <li>Based on session</li>
+            <li>Session ID (created by the server): not predictable, ensure freshness (not reused old)</li>
+            <li>Session ID: use a non-persistent cookie and sending under HTTPS</li>
+            <li>Create new session ID when login, invalidate session on logout or after timeout.</li>
+            <li>CSRF</li>
+          </ol>
+        </li>
+        <li>
+          <h4>Cross Site Scripting (XSS, CSS - cascading style sheets)</h4>
+          <ol>
+            <li>When html is dynamic generated, xss is more possible.</li>
+            <li>You have securet data in a "good" website, like usbank.com.
+              You visit the attacker.com, attacker.com can fool your browser to steal information from usback.com.
 
+            </li>
+            <li>violate Same origin policy (scheme:address:port)</li>
+            <li>Reflected XSS: injected data used immediately in producing a page. </li>
+
+            <li>Persistent XSS: injected data used to produce page later.(stored in db) (e.g. hands-on assignment)</li>
+            <li>Attacker inject send cookie JS to a webpage's table, victim open the page, execute the malicious code, and send cookie to attacker.</li>
+            <li>DOM-based XSS: injected occurs in client-side page construction</li>
           </ol>
         </li>
       </ol>
