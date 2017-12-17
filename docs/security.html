@@ -50,6 +50,8 @@
         <ol class="dropdown">
           <li><a href="#">Apache2</a></li>
         </ol>
+        <li><a href="#4">Compression</a></li>
+        <li><a href="#5">Multimedia streaming</a></li>
         <li><a href="#tools.html">Tools</a></li>
         <ol class="dropdown">
 
@@ -81,17 +83,30 @@
           </ol>
         </li>
         <li>
-          (Network level) Intrusion detection systems (IDS): a middle-box device tells us that we are under attacking.
+          (Network level) Intrusion detection systems (<mark>IDS</mark>): a middle-box device tells us that we are under attacking.
           <ol>
             <li>Decision used to check whether it is an attacking is made on the fly. V.S. firewall policies are pre-determined.
             </li>
-            <li>Signature matching: signature is a pattern that matches known bad behavior. Cons 1). Defender must know the attacking before. it won't work for novel attacks. 2). Often easy to attack around.</li>
+            <li>Signature matching: signature is a pattern that matches known bad behavior. Cons 1). Defender must know the attacking before. it won't work for novel attacks. 
+              2). Often easy to attack around. If you are unluck to be the first victim. Also, the signature is static and may be known by attacker.</li>
             <li>Anomaly detection: learn pattern of normal behavior. Cons: 1). if the normal behavior is very diverse, then it is hard to detect.
-              2). hard to avoid false positive 3). adversary can train over time.</li>
+              2). hard to avoid false positive, fn is also unavoidable. 3). adversary can train over time.</li>
+              <li>
+                Host-based on IDS: look for compromised process or user from within machines.
+              </li>
+              <li>False Positive: Bad thing: System said you are under attack, but you are actually good.</li>
+              <li>False Negative: Bad thing: System said you are good, but you are under attack.</li>
+              <li>False Positive + </li>
           </ol>
-
-
         </li>
+        <li>Base rate problem
+          <ol>
+            <li>Rare events trigger alarm, but most of these rare events are good. So it induces a high FP.</li>
+            <li>So attacker can take this advantage.</li>
+            <li>Wagner and Soto mimicry attack: Host-based IDS based on sequence of syscalls</li>
+          </ol>
+        </li>
+        
         <li>Tunneling: Against firewall
           <ol>
             <li>Any data can be transmitted on any channel, if both sides agree.</li>
@@ -99,6 +114,66 @@
             <li>SSH can be used to tunnel almost any traffic.</li>
           </ol>
         </li>
+        <li>
+          Malware: Malicious software.(专门用来做坏事的software. some software that have bugs that can be applied by attackers to do bad things are not
+          malware.)
+          <ol>
+            <liT>Trojan (horse木马): looks like benign, e.g. a text editor. But it has malicious purpose. 
+              User are fooled to run it.
+            </li>
+            <li>Computer Virus: a little piece of software that attack to a software to propragate when the attached software run.
+
+            </li>
+            <li>Worms: a complete program, completely automatic self-propagation. <mark>Requires remote security holes.</mark></li>
+            <li>Rootkit: hide malware by changing the kernel behavior. e.g. ps command will do a malicious thing instead of printing malicious message.</li>
+            <li>MBR (master boot record) virus: take control early in boot</li>
+            <li>Blue-pill attack: malware is a VM Monitor running your system.</li>
+            <li>Why people do malware: 1) curiosity &amp; be famous 2). making money 3). nation-oriented</li>
+            <li>Ransomware(勒索软件): encrypt victim's files and let them pay money for decrypting.</li>
+          </ol>
+        </li>
+        <li>
+          Bots and botnets
+          <ol>
+            <li>Bot(肉鸡): program under control of remote attacker</li>
+            <li>Botnet: large group of bot-infectde computers with common "master"</li>
+            <li>control bot: peer-to-peer &amp; RIC</li>
+            <li>Make money fron botnets: 0). click (ad) fraud. 1).distributed DoS, 2).Bitcoin mining 3). Spam sending 4). paid-per-install (租给其他attacker)</li>
+          </ol>
+        </li>
+        <li>
+          Anti-virus (AV) systems
+          <li>Signatured-based AV: similar idea to signature-based IDS, but it requires a frequently changed database.</li>
+          <li>AV software company has research on attacking, keep the database up-to-date.</li>
+          <li>Emulation: run an unknown software in a invaluable operating system to see if it does some malicious actions.</li>
+          <li>Polymorphism: attackers make a lot of variants of malware, 30 million virus samples observed.</li>
+          <li>Packing: static code creates real malicious code on the fly. </li>
+          <li>Fake anti-virus: ... 报假警骗钱。</li>
+        </li>
+        <li>DoS
+          <ol>
+            <li>Unexpected and unintented by the author.</li>
+            <li>Algorithmic complexity attacks: (Developer always care the worst case because they want their systems can always work well). 
+              an adversary make your algorithm have the worst-case behavior. e.g. Attacker always let quicksort always be O(n^2).</li>
+            <li>XML entity expansion: XML entities (like C macros)</li>
+            <li>zip file quine: zip file contains itself, systems recursively unzip file will go to infinite loop.</li>
+            <li>DoS against network services:
+              <ol>
+                <li>making packet small and high sending frequency.</li>
+                <li>Queuing Theory: arrival rate >= service rate, request go unbound.</li>
+                <li>SYN flooding: syn first of three packets to set up new connection. Server allocates space after receiving first syn. 
+                  (CSCI 4211).</li>
+                <li>SYN flooding defense: SYN cookies: change server behavior to stateless approach. </li>
+                <li>DoS against network links: try to use all availabe bandwidth.</li>
+                <li>Traffic multipliers: attacker, victim, third parties(bots) send packets to victim to slow his/her network.</li>
+                <li>Distributed Dos: </li>
+              </ol>
+            </li>
+          </ol>
+          
+        </li>
+        
+       
       </ol>
       <h3 id="crypto">Cryptography</h3>
       <p>This section introduces the basic concepts of cipher. Following, a couple of popular ciphers are shown.</p>
