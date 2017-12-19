@@ -83,6 +83,24 @@
           </ol>
         </li>
         <li>
+          WEP (wired equivalent privacy)
+          <ol>
+            <li>Stream cipher + CRC</li>
+            <li>Single shared symmetric key</li>
+            <li>WEP key 40-bit length + 24-bit IV = 64 bit RC4 key </li>
+            <li>RC4 problem: key schedule vulnerable: extend small key to large for streaming. Similar key extends the same large key.</li>
+          </ol>
+        </li>
+        <li>
+          WPA/WPA2
+          <ol>
+            <li>
+              Seesion key set up in a 4-message handshake
+            </li>
+            <li>Key reinstallation attack: replay #3 message (the #3 message in the 4 message is used to setup the session key)</li>
+          </ol>
+        </li>
+        <li>
           (Network level) Intrusion detection systems (<mark>IDS</mark>): a middle-box device tells us that we are under attacking.
           <ol>
             <li>Decision used to check whether it is an attacking is made on the fly. V.S. firewall policies are pre-determined.
@@ -172,8 +190,21 @@
           </ol>
           
         </li>
-        
+        <li>
+          Side-channel attacking
+         <ol>
+           <li>Timing-analysis: </li>
+           <li>Power analysis: </li>
+           <li>Fault injection: </li>
+           <li>Data non-erasure: </li>
+         </ol>
+        </li>
        
+      </ol>
+      <h3>Anonymous communications techniques</h3>
+      <p></p>
+      <ol class="section-list">
+        
       </ol>
       <h3 id="crypto">Cryptography</h3>
       <p>This section introduces the basic concepts of cipher. Following, a couple of popular ciphers are shown.</p>
@@ -579,10 +610,16 @@
         <h3>Web security <a href="https://www.owasp.org/index.php/Main_Page">Open Web Application Security Project(OWASP)</a></h3>
         <ol class="section-list">
         <li>
+          <h4>Concepts</h4>
+          <ol>
+            <li>Signature: A private key signed message by the site.</li>
+            <li>Certificate: a public key distributed by the trusted authority. cert = (subject's public key, subject, authority's signature)</ol>
+
+        </li>
+        <li>
+
           <h4>CA hierarchies</h4>
           <ol>
-          
-          
           <li>Organize CAs in a tree.</li>
           <li>Enterprise PKI (public key infrastructure) links up with permissions.</li>
           <li>Revocation: 1. short expiration times (bad scalability) 2. certificate revocation lists 2. certificate status online checking API</li>
@@ -621,6 +658,8 @@
             <li>GET: ?key=value&amp;key2=value2, query</li>
             <li>POST: sumbit form.</li>
             <li>Cookies: make the HTTP have states. Set by the server, store in the client, send back server.</li>
+            <li>Cookies arm race: privacy-sensitive users disable cookies\sites have various reason for using cookies.</li>
+            <li>Evercookie: store in different places. Regenerate if subset are deleted.</li>
           </ol>
         </li>
         <li>
@@ -644,31 +683,184 @@
             <li>Session ID (created by the server): not predictable, ensure freshness (not reused old)</li>
             <li>Session ID: use a non-persistent cookie and sending under HTTPS</li>
             <li>Create new session ID when login, invalidate session on logout or after timeout.</li>
-            <li>CSRF</li>
+            
           </ol>
         </li>
         <li>
           <h4>Cross Site Scripting (XSS, CSS - cascading style sheets)</h4>
           <ol>
-            <li>When html is dynamic generated, xss is more possible.</li>
-            <li>You have securet data in a "good" website, like usbank.com.
-              You visit the attacker.com, attacker.com can fool your browser to steal information from usback.com.
-
-            </li>
+            <li>When html is dynamic generated, xss is more possible.</li>    
             <li>violate Same origin policy (scheme:address:port)</li>
             <li>Reflected XSS: injected data used immediately in producing a page. </li>
-
+            <li>two siteL vitcim site; attacker site.</li>
             <li>Persistent XSS: injected data used to produce page later.(stored in db) (e.g. hands-on assignment)</li>
             <li>Attacker inject send cookie JS to a webpage's table, victim open the page, execute the malicious code, and send cookie to attacker.</li>
             <li>DOM-based XSS: injected occurs in client-side page construction</li>
+            <li>More complicated: html element's attributes can have script.</li>
+            <li>one-pass delete: &lt;scr&lt;script&gt;ipt&gt;</li>
+            <li>Filter failure: utf-7. +ADw-script+AD4- is utf-7's &lt;script&gt;</li>
+            <li>Filter failure: event handler, JS function without js tag. &lt;IMG onmouseover="alert(xss)"&gt;</li>
+            <li>Content Security Policy: (defense) new http header specified some rule: e.g. no inline JS</li>
+            <li>CSRF: cross-site request forgery: you have been logining to usbank.com (have the cookie). you are now visiting evil.com and click a button. The button is set a url to usbank.com
+                to wire money to the evil.com's owner. Because you are logining to the usbank.com, you would be successfully wire the money. (A site utilize B site's cookie via broswer.)
+              </li>
+              <li>CSRF: prevention: client also need to send a random-nonce to the usbank.com in post request. Because the evil.com doesn't know how to generate a proper random-nonce,
+                it would fail. (XSS can steal CSRF tokens)
+              </li>
+          </ol>
+        </li>
+        <li>
+          <h4>Content sniffing</h4>
+          <ol>
+            <li>browser determine the file's type by looking at the header, read some bytes in the contents.</li>
+            <li>Guessing problem: </li>
+          </ol>
+        </li>
+        <li>
+          <h4>Open redirects</h4>
+          <ol>
+            <li>Open redirect target supplied in parameter with no checks</li>
+            <li>Doesn't directly hurt the hosting site.</li>
+            <li>But reputation risk, say if used in phishing</li>
+            <li>We teach users to trust by site.</li>
+          </ol>
+        </li>
+        <li>
+          <h4>Tracking</h4>
+          <ol>
+            <li>Tracking the user broswer certain sites (for ad).</li>
+            <li>Add a 1*1 images in html for tracking.</li>
+          </ol>
+        </li>
+        <li>
+          <h4>Server configuration</h4>
+          <ol>
+            <li>don't have default accounts</li>
+            <li>don't provide unneeded features</li>
+            <li>Framework behaviors: don't automatically create variables from query fields</li>
+            <li></li>
+          </ol>
+        </li>
+        <li>
+          <h4>DNSSec's goal Using signature &amp; certificate, not encryption</h4>
+          <ol>
+            <li>Authenticity of positive replies: ask: www.google.com reply: 12.123.214.213. Then it's truely google.</li>
+            <li>Authenticity of negative replices: ask: where.google.com reply: doesn't exist. Then it's google that tells you not exist.</li>
+            <lil>Integrity: request &amp; response not modified in transit.</lil>
+            <li>-Confidentiality: public database, not secret data.</li>
+            <li>-Availability: DoS is still a problem.</lil>
+          </ol>
+        </li>
+        <li>
+          <h4>DNSSec's implementation</h4>
+          <ol>
+            <li>Each resource record has an RRSIG signature, the sigature is usually larger than the record itself.</li>
+            <li>Signature validation: when you visit the website, the website tells you the certificate, use the public key to validate if the website is true.</li>
+            <li>Protection of negative answer: we won't want attacker to be able to control this message (Dos, and attacker may lead users to vulnerable website).</li>
+            <ol>
+              <li>NSEC: signed a range of negative anwsers together. Because too many negative message, we signed them together.  </li>
+            </ol>
+          </ol>
+        </li>
+        <li>
+          <h4>SSH</h4>
+          <ol>
+            <li>Server's duties: listening port, construct the secure connection, authenticate the client, spwan environment.</li>
+            <li>Client's duties: send request, construct the secure connection, verify the server's identity, providing credentials to server.</li>
+            <li>
+              <ol>
+                <li>1. both parties produce a pair of public-private keys. Exchange the public key.   
+                <li>2. share the secret data from both sides to set up the symmetric session key. (Based on Diffie-Hellman)</li>
+                <li>3. login: 1). password-based: client send password to server via the secure channel.</li>
+                <li>3. login: 2). ssh key-pair: server use public key to encrypt a message and then ask the original message.</li>
+                <li>4. transmit data</li>
+              </ol>
+            </li>
+            <li>
+              Each server just has one common public-private key pair for all the users. The public key is stored in /etc/ssh/, depends on which protocol you used, the public key is usually the ssh_host_rsa_key.
+            </li>
+            <li>
+              User's public key is upload to the server's user directory ~/.ssh.
+            </li>
+            <li>
+              Server's public key is stored in client's known_host. The client always trust the server's identity when the first connection. In the following connection, the client will compare the stored server's public key with the key just received from server.
+              If it is different, the ssh will give warning to client. The warning is possible when servers have dynamic IP. For example, when client A, server B and server C in a network. A connects to B(192.168.0.2), then tomorrow, A connects to C (192.168.0.2)
+              B and C have different public key but same IP, the client ssh will give warning.
+            </li>
+            <li>
+              Does client has a premanent public-private key for stage 1?
+            </li>
+            <li>
+              ssh key-pair based login. A public-private key is used. Public key is stored in the server (public-key, client-id) in the ~/.ssh/authentized_keys file. The private key is managed by the ssh-agent in the client.
+              The client send the client-id to the server, the server find its public-key. Use this public to encrypt a number. The client decrypt the message with the private key. Calculate MD5(revealed number || session key), send by to server.
+              The server does same operation to verify it.
+            </li>
+            <li>
+              In stage 2 based on public-key. One client just generates one private-public key pair, it used for all different server. (We just tell the public key to all the server we want to connect)
+              In client, ssh-keygen -t rsa. It generate id_rsa and id_rsa.pub. Append the id_rsa.pub to the server's authentized_hosts. Whenever you want to set up a new server, just use the same public key.
+            </li>
+          </ol>
+        </li>
+
+      </ol>
+      <h3>Signature scheme: generalized MAC: separate signing key (secret) and verification key.</h3>
+      <p>A wants to verify B. B gives A the signature (Private key signed message) and the trusted authority gives A the public key (certificate).
+        A use the public key to decrypt private key signed message, and verify the resulted message is B. 
+      </p>
+      <p>Assume the authority is correct, if verification passed, then B is real B. However, if verification does not passed, then B may not B. (B can give
+        A a fake signature because B does not want acknowledge he/she is B. B干了坏事，不想承认) </p>
+      <ol class="section-list">
+        <li>
+          <h4>Needham-Schroeder</h4>
+          <ol>
+            <li>Goal: mutual authentication via nonce exchange. Assume already hast trust-worth public keys</li>
+            <li>Suppose<img src="./images/needham-schroeder-suppose.png" width="250" height="200"></li>
+            <li>Real<img src="./images/needham-schroeder-real.png" width="300" height="300"></li>
+            <li>即使C没有A的private key, C也可以假冒A去和B谈。</li>
+            <li>Put Bob's name in supposed step 2</li>
+          </ol>
+        </li>
+        <li>
+          <h4>Denning-Sacco</h4>
+          <li><img src="./images/denning-sacco.png" width="300" height="300"></li>
+          A 和 B 讲话，然后B伪造A的身份去和C 讲话.
+          Bacause B has the signed letter by A. 
+        </li>
+        <li>
+          <h4>Envelops analogy: sign paper, then encrypt with envelop. Don't do opposite because we don't want others to use our unsigned paper.</h4>
+        </li>
+        <li>
+          <h4>Protocol's principle</h4>
+          <ol>
+            <li>Put the destination in the session key e.g. SignA(session-key, dest)</li>
+            <li>Use timestamps or nonces for freshness</li>
+            <li>Be explicit about the context</li>
+            <li>Don’t trust the secrecy of others’ secrets</li>
+            <li>Whenever you sign or decrypt, beware of being an oracle (you also provide a service to the attacker:padding)</li>
+            <li>Distinguish runs of a protocol</li>
           </ol>
         </li>
       </ol>
-      <h3>Signature scheme: generalized MAC: separate signing key (secret) and verification key.</h3>
-      <p></p>
-      <ol class="section-list">
-
-      </ol>
+    <h3>Random number and entropy</h3>
+    <p>Cryptographic RNGs (Random Number Generators) use cipher-like techniques to provide indistinguishability. 
+      But rely on truly random seeding to stop brute force. Modern best practice: seed pool with 256 bits of entropy.
+    </p>
+    <ol class="section-list">
+      <li>
+        SSL seeded (time_of_day, pid, ppid) : time of day is not secret, pid depends on how many processes is running. Moreover, you may always have the same pid.
+      </li>
+      <li>
+        Debian/OpenSSL: /dev/urandom + uninitilized variable. But later some developers use the ssl lib, it reported "Potential use of uninitialized value".
+        Then the bug was reported and known by the maintainers. The maintainers fix the bug but also disabled most entropy (2 years before discovery).
+      </li>
+      <li>
+        <h4>Dual EC DRBG (elliptic curve -- determined random bit generator)</h4>
+        <ol>
+          <li>Standard but slow, NIST now does not recommend withdrawal</li>
+        </ol>
+      </li>
+    </ol>
+    
 
     </div>
   </body>
